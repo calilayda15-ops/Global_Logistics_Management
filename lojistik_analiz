@@ -1,0 +1,53 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+def lojistik_sistemi_baslat():
+    print("Sistem Başlatılıyor... Veriler İşleniyor.\n")
+
+    # 1. Veri Hazırlığı (Pandas & NumPy)
+    # Marka ismi vermeden genel ürün kategorileri
+    urun_verileri = {
+        'Kategori': ['Kritik İlaçlar', 'Tıbbi Cihazlar', 'Takviye Gıdalar', 'Hijyen Ürünleri'],
+        'Mevcut_Stok': [420, 850, 290, 1500],
+        'Hedef_Stok': [500, 500, 500, 1000],
+        'Birim_Maliyet': [12.5, 450.0, 35.0, 10.0]
+    }
+
+    df = pd.DataFrame(urun_verileri)
+
+    # 2. Analiz: NumPy ile Stok Farkı Hesaplama
+    df['Stok_Farki'] = df['Hedef_Stok'] - df['Mevcut_Stok']
+
+    # 3. Kritik Durum Filtreleme (Pandas)
+    kritik_durumlar = df[df['Mevcut_Stok'] < df['Hedef_Stok']]
+
+    print("--- KRİTİK STOK ANALİZİ ---")
+    print(kritik_durumlar[['Kategori', 'Mevcut_Stok', 'Stok_Farki']])
+
+    # 4. Görselleştirme (Matplotlib)
+    plt.figure(figsize=(10,6))
+    plt.bar(df['Kategori'], df['Mevcut_Stok'], color='navy', label='Mevcut Stok')
+    plt.axhline(y=500, color='red', linestyle='--', label='Kritik Eşik')
+
+    plt.title("Küresel Envanter Dağılımı ve Kritik Seviyeler")
+    plt.xlabel("Ürün Grupları")
+    plt.ylabel("Adet")
+    plt.legend()
+
+    # Grafiği kaydetme (GitHub'a yüklemek için hazır)
+    plt.savefig('global_logistics_report.png')
+    plt.show()
+
+    print("\nAnaliz tamamlandı. 'global_logistics_report.png' olarak kaydedildi.")
+
+# Sistemi çalıştıralım
+lojistik_sistemi_baslat()
+ Sistem Başlatılıyor... Veriler İşleniyor.
+
+--- KRİTİK STOK ANALİZİ ---
+          Kategori  Mevcut_Stok  Stok_Farki
+0   Kritik İlaçlar          420          80
+2  Takviye Gıdalar          290         210
+
+Analiz tamamlandı. 'global_logistics_report.png' olarak kaydedildi.
